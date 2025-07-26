@@ -13,9 +13,9 @@
     <!-- Tailwind CSS for modern styling -->
     <script src="https://cdn.tailwindcss.com"></script>
 
-    <!-- Swiper JS for sliders -->
-    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
-    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <!-- Swiper JS (Updated) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
     <!-- Google Fonts: Onest -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -42,7 +42,6 @@
             position: relative;
         }
 
-        /* Класс для фонового логотипа - ИЗМЕНЕНО */
         .background-logo {
             position: fixed;
             top: 0;
@@ -51,13 +50,13 @@
             height: 100vh;
             background-image: url('logo.jpg');
             background-repeat: no-repeat;
-            background-position: center center; /* Логотип по центру */
-            background-size: contain; /* Масштабирует изображение, чтобы оно полностью поместилось */
+            background-position: center center;
+            background-size: contain;
             background-attachment: fixed;
             z-index: -10;
             opacity: 0.05;
             filter: blur(3px);
-            pointer-events: none; /* Чтобы фон не мешал кликам */
+            pointer-events: none;
         }
 
         .md-main-color-btn {
@@ -128,6 +127,11 @@
             position: relative;
             overflow: hidden;
             border-radius: 0.5rem;
+            transition: transform 0.3s ease-in-out;
+        }
+        
+        .services__item:hover {
+            transform: scale(1.03);
         }
 
         .services__item .item-content {
@@ -166,9 +170,10 @@
         
         .before-after-slider {
             width: 100%;
-            max-width: 900px; /* Limit max width */
+            max-width: 900px; 
             margin-left: auto;
             margin-right: auto;
+            position: relative;
         }
 
         .before-after__slide {
@@ -214,6 +219,28 @@
             border-radius: 50%;
             font-size: 16px;
             line-height: 1;
+        }
+        
+        /* --- FIXED: Swiper Arrow Styles --- */
+        .before-after-slider .swiper-button-next,
+        .before-after-slider .swiper-button-prev {
+            color: white;
+            background-color: rgba(4, 120, 87, 0.6); /* Semi-transparent green */
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            transition: background-color 0.3s;
+        }
+
+        .before-after-slider .swiper-button-next:hover,
+        .before-after-slider .swiper-button-prev:hover {
+            background-color: rgba(4, 120, 87, 0.9);
+        }
+
+        .before-after-slider .swiper-button-next::after,
+        .before-after-slider .swiper-button-prev::after {
+            font-size: 18px;
+            font-weight: bold;
         }
         
         .questions__item .item-content {
@@ -270,6 +297,13 @@
         }
         .popup-close:hover {
             transform: scale(1.1);
+        }
+
+        .reply__block {
+            transition: transform 0.3s ease-in-out;
+        }
+        .reply__block:hover {
+            transform: scale(1.05);
         }
 
         /* Mobile Menu */
@@ -425,7 +459,7 @@
                 </div>
             </section>
             
-            <!-- NEW Why Us Section -->
+            <!-- NEW Why Us Section (IMPROVED) -->
             <section class="py-16 bg-gray-100/95 relative overflow-hidden" id="why-us">
                 <div class="container mx-auto px-4">
                     <h2 class="text-3xl md:text-4xl font-bold text-center mb-4">Идеальная чистота без компромиссов</h2>
@@ -433,19 +467,19 @@
                     <div class="grid md:grid-cols-3 gap-8">
                         <!-- Feature 1 -->
                         <div class="feature-card bg-white/80 backdrop-blur-sm p-8 rounded-lg shadow-lg text-center transform hover:scale-105 transition-transform duration-300 border border-gray-200">
-                            <div class="text-5xl mb-4">✨</div>
+                            <img src="https://api.iconify.design/ph:sparkle-duotone.svg?color=%2334ad68" alt="Иконка гарантии блеска" class="h-16 w-16 mx-auto mb-4">
                             <h3 class="text-xl font-bold mb-2">Гарантия блеска</h3>
                             <p class="text-gray-600">Мы гарантируем, что вы останетесь довольны результатом. Если нет — мы вернемся и все исправим бесплатно.</p>
                         </div>
                         <!-- Feature 2 -->
                         <div class="feature-card bg-white/80 backdrop-blur-sm p-8 rounded-lg shadow-lg text-center transform hover:scale-105 transition-transform duration-300 border border-gray-200">
-                            <div class="text-5xl mb-4">🌿</div>
+                            <img src="https://api.iconify.design/ph:leaf-duotone.svg?color=%2334ad68" alt="Иконка эко-подхода" class="h-16 w-16 mx-auto mb-4">
                             <h3 class="text-xl font-bold mb-2">Эко-подход</h3>
                             <p class="text-gray-600">Используем только сертифицированные, гипоаллергенные и безопасные средства для детей и животных.</p>
                         </div>
                         <!-- Feature 3 -->
                         <div class="feature-card bg-white/80 backdrop-blur-sm p-8 rounded-lg shadow-lg text-center transform hover:scale-105 transition-transform duration-300 border border-gray-200">
-                             <div class="text-5xl mb-4">💰</div>
+                             <img src="https://api.iconify.design/ph:tag-duotone.svg?color=%2334ad68" alt="Иконка честной цены" class="h-16 w-16 mx-auto mb-4">
                             <h3 class="text-xl font-bold mb-2">Честная цена</h3>
                             <p class="text-gray-600">Стоимость оговаривается заранее и не меняется в процессе. Никаких скрытых платежей и доплат.</p>
                         </div>
@@ -514,20 +548,26 @@
             </section>
         </div>
 
-        <!-- Before/After Page -->
+        <!-- Before/After Page (FIXED) -->
         <div class="page-content" data-page="before">
             <section class="before-after py-16 bg-white/95" id="before-page">
                 <div class="container mx-auto px-4">
                     <h2 class="text-3xl md:text-4xl font-bold text-center mb-12"><b>До и После.</b> Результат нашей работы.</h2>
-                    <div class="swiper-container before-after-slider">
+                    <!-- Swiper container -->
+                    <div class="swiper before-after-slider">
                         <div class="swiper-wrapper">
+                            <!-- Slide 1 -->
                             <div class="swiper-slide flex items-center justify-center"><div class="before-after__slide"><img src="https://cleaning-home.by/wp-content/uploads/2023/11/4-1-1.jpg" alt="До" class="before-image"><img src="https://cleaning-home.by/wp-content/uploads/2023/11/4-2.jpg" alt="После" class="after-image"><div class="before-after__slider-handle"></div></div></div>
+                            <!-- Slide 2 -->
                             <div class="swiper-slide flex items-center justify-center"><div class="before-after__slide"><img src="https://cleaning-home.by/wp-content/uploads/2023/11/1-1.jpg" alt="До" class="before-image"><img src="https://cleaning-home.by/wp-content/uploads/2023/11/1-2.jpg" alt="После" class="after-image"><div class="before-after__slider-handle"></div></div></div>
+                            <!-- Slide 3 -->
                             <div class="swiper-slide flex items-center justify-center"><div class="before-after__slide"><img src="https://cleaning-home.by/wp-content/uploads/2023/11/3-1.jpg" alt="До" class="before-image"><img src="https://cleaning-home.by/wp-content/uploads/2023/11/3-2.jpg" alt="После" class="after-image"><div class="before-after__slider-handle"></div></div></div>
                         </div>
+                        <!-- Pagination -->
                         <div class="swiper-pagination"></div>
-                        <div class="swiper-button-next text-green-600"></div>
-                        <div class="swiper-button-prev text-green-600"></div>
+                        <!-- Navigation buttons -->
+                        <div class="swiper-button-prev"></div>
+                        <div class="swiper-button-next"></div>
                     </div>
                 </div>
             </section>
@@ -614,8 +654,6 @@
                 }
             });
             
-            // The footer is now global, so it's always visible. No need to toggle.
-            
             window.scrollTo(0, 0); // Scroll to top on page change
         }
 
@@ -653,7 +691,6 @@
             document.querySelectorAll('.popup.active').forEach(p => p.classList.remove('active'));
         }
         
-        // Add listeners to all buttons that should open the popup
         document.querySelectorAll('#open-callback-popup, #open-callback-popup-2').forEach(btn => {
             if(btn) {
                 btn.addEventListener('click', () => openPopup(callbackPopup));
@@ -666,7 +703,6 @@
         
         document.querySelectorAll('.popup').forEach(popup => {
             popup.addEventListener('click', (e) => {
-                // Close if clicked on the background overlay
                 if (e.target === popup) {
                     closePopups();
                 }
@@ -679,7 +715,6 @@
             const title = item.querySelector('.item-title');
             title.addEventListener('click', () => {
                 const currentlyActive = document.querySelector('.questions__item.active');
-                // Close other items if one is opened
                 if (currentlyActive && currentlyActive !== item) {
                     currentlyActive.classList.remove('active');
                 }
@@ -687,8 +722,7 @@
             });
         });
 
-        // --- Before/After Slider ---
-        // Ensure Swiper is initialized only when the page is visible
+        // --- Before/After Slider (FIXED) ---
         let beforeAfterSlider;
         function initSwiper() {
             if (!beforeAfterSlider && document.querySelector('.before-after-slider').offsetParent !== null) {
@@ -706,20 +740,22 @@
             }
         }
         
-        // Check on page load/navigate
         const beforePageObserver = new MutationObserver((mutations) => {
             for (let mutation of mutations) {
                 if (mutation.attributeName === 'class' && mutation.target.classList.contains('active')) {
-                    initSwiper();
+                    // Use a small timeout to ensure the element is fully visible and rendered
+                    setTimeout(initSwiper, 100);
                 }
             }
         });
         const beforePage = document.querySelector('[data-page="before"]');
         if (beforePage) {
             beforePageObserver.observe(beforePage, { attributes: true });
+            // Initial check if the page is already active
+            if (beforePage.classList.contains('active')) {
+                initSwiper();
+            }
         }
-        initSwiper(); // Initial check
-
 
         document.querySelectorAll('.before-after__slide').forEach(slide => {
             const afterImage = slide.querySelector('.after-image');
