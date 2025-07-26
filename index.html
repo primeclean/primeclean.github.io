@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Клининг в Минске - PRIME CLEAN</title>
+    <meta name="description" content="Профессиональная уборка квартир, домов и офисов в Минске и Минской области. Химчистка, уборка после ремонта, устранение запахов.">
+    <meta name="keywords" content="клининг, уборка, минск, химчистка, уборка после ремонта, prime clean">
+    <meta content="telephone=no" name="format-detection">
+    <meta name="HandheldFriendly" content="true">
+    <meta name="robots" content="index, follow">
+
+    <!-- Tailwind CSS for modern styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Swiper JS for sliders -->
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+
+    <!-- Google Fonts: Onest -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Onest:wght@100..900&display=swap" rel="stylesheet">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/jpeg" href="logo.jpg">
+
+    <style>
+        /* Custom styles to match the original design */
+        :root {
+            --main-color: #34ad68;
+            --text-main-color: #3a3a3a;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Onest', sans-serif;
+            color: var(--text-main-color);
+            position: relative;
+        }
+
+        /* Класс для фонового логотипа - ИЗМЕНЕНО */
+        .background-logo {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-image: url('logo.jpg');
+            background-repeat: no-repeat;
+            background-position: center center; /* Логотип по центру */
+            background-size: contain; /* Масштабирует изображение, чтобы оно полностью поместилось */
+            background-attachment: fixed;
+            z-index: -10;
+            opacity: 0.05;
+            filter: blur(3px);
+            pointer-events: none; /* Чтобы фон не мешал кликам */
+        }
+
+        .md-main-color-btn {
+            background-color: var(--main-color);
+            color: white;
+            transition: background-color 0.3s;
+        }
+
+        .md-main-color-btn:hover {
+            background-color: #2a8a53;
+        }
+        
+        .header__nav {
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .nav-link {
+            position: relative;
+            padding-bottom: 5px;
+        }
+
+        .nav-link span {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--main-color);
+            transition: width 0.3s;
+        }
+
+        .nav-item.nav-item--active .nav-link span {
+            width: 100%;
+        }
+        
+        .first {
+            position: relative;
+            color: white;
+        }
+
+        .first__bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .first__bg::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .first__bg img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .services__item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 0.5rem;
+        }
+
+        .services__item .item-content {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 1rem;
+            color: white;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            transform: translateY(30%);
+            transition: transform 0.4s ease-in-out;
+        }
+
+        .services__item:hover .item-content {
+            transform: translateY(0);
+        }
+
+        .services__item .item-text,
+        .services__item .item-title[style*="padding-bottom"] {
+            opacity: 0;
+            transition: opacity 0.4s ease-in-out;
+        }
+        
+        .services__item:hover .item-text,
+        .services__item:hover .item-title[style*="padding-bottom"] {
+            opacity: 1;
+        }
+        
+        .page-content {
+            display: none;
+        }
+        .page-content.active {
+            display: block;
+        }
+        
+        .before-after-slider {
+            width: 100%;
+            max-width: 900px; /* Limit max width */
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .before-after__slide {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16/9;
+            cursor: ew-resize;
+            overflow: hidden;
+            border-radius: 0.5rem;
+        }
+        .before-after__slide img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            pointer-events: none;
+        }
+        .before-after__slide .after-image {
+            clip-path: polygon(50% 0, 100% 0, 100% 100%, 50% 100%);
+        }
+        .before-after__slider-handle {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 4px;
+            height: 100%;
+            background: white;
+            transform: translateX(-50%);
+            z-index: 10;
+            pointer-events: none;
+        }
+        .before-after__slider-handle::after {
+            content: '↔';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            color: black;
+            padding: 8px;
+            border-radius: 50%;
+            font-size: 16px;
+            line-height: 1;
+        }
+        
+        .questions__item .item-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out, padding 0.5s ease-in-out;
+            padding-top: 0;
+            padding-bottom: 0;
+        }
+        .questions__item.active .item-content {
+            max-height: 500px; /* Adjust as needed */
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+        .questions__item .item-btn svg {
+            transition: transform 0.5s;
+        }
+        .questions__item.active .item-btn svg {
+            transform: rotate(45deg);
+        }
+        
+        .popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.6);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        .popup.active {
+            display: flex;
+        }
+        .popup-content {
+            position: relative;
+        }
+        .popup-close {
+            position: absolute;
+            top: -15px;
+            right: -15px;
+            background: white;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            transition: transform 0.2s;
+        }
+        .popup-close:hover {
+            transform: scale(1.1);
+        }
+
+        /* Mobile Menu */
+        @media (max-width: 768px) {
+            .header__nav {
+                display: none;
+                width: 100%;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                background-color: white;
+                z-index: 50;
+            }
+            .header__nav.active {
+                display: block;
+            }
+            .nav {
+                flex-direction: column;
+                align-items: center;
+            }
+            .nav-item {
+                width: 100%;
+                text-align: center;
+                border-bottom: 1px solid #eee;
+            }
+            .nav-link {
+                padding: 1rem;
+                display: block;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-white">
+    
+    <div class="background-logo"></div>
+
+    <!-- Header -->
+    <header class="relative shadow-md bg-white z-50">
+        <div class="header__top border-b">
+            <div class="container mx-auto px-4 py-2 flex justify-between items-center flex-wrap">
+                <div class="flex items-center space-x-4">
+                    <div class="header__logo">
+                        <a href="#" class="nav-trigger" data-page="home">
+                            <img src="logo.jpg" alt="PRIME CLEAN Logo" class="h-16 w-auto">
+                        </a>
+                    </div>
+                    <div class="header__text hidden md:block text-sm">
+                        <b>Уборка и химчистка</b><br> в Минске и Минской области
+                    </div>
+                </div>
+                
+                <div class="header__social hidden lg:flex items-center space-x-4">
+                    <p class="text-sm">Пишите, <b>мы онлайн</b></p>
+                    <div class="social-links flex space-x-2">
+                        <a target="_blank" href="#"><img src="https://cleaning-home.by/wp-content/uploads/2022/11/viber.png" alt="Viber" class="rounded-full h-6 w-6"></a>
+                        <a target="_blank" href="#"><img src="https://cleaning-home.by/wp-content/uploads/2022/11/telegram.png" alt="Telegram" class="rounded-full h-6 w-6"></a>
+                        <a target="_blank" href="#"><img src="https://cleaning-home.by/wp-content/uploads/2022/11/whats-app.png" alt="WhatsApp" class="rounded-full h-6 w-6"></a>
+                    </div>
+                </div>
+                <div class="header__contacts text-sm text-right">
+                    <p>Звоните <b>Пн-Вс: <span>9 - 21</span></b></p>
+                    <a href="tel:+375291861381" class="font-bold text-lg text-gray-800 hover:text-green-600">+375(29)1861381</a>
+                    <div class="call-back text-green-600 cursor-pointer text-xs underline" id="open-callback-popup">Заказать звонок</div>
+                </div>
+                <div class="header__btn-wrap md:hidden">
+                    <button id="mobile-menu-btn" class="text-gray-700 focus:outline-none">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <nav class="header__nav" id="mobile-menu">
+            <div class="container mx-auto px-4">
+                <ul class="nav flex justify-center space-x-6 py-2">
+                    <li class="nav-item"><a class="nav-link text-gray-700 hover:text-green-600 nav-trigger" href="#" data-page="home">Главная</a><span></span></li>
+                    <li class="nav-item"><a class="nav-link text-gray-700 hover:text-green-600 nav-trigger" href="#" data-page="services">Все услуги</a><span></span></li>
+                    <li class="nav-item"><a class="nav-link text-gray-700 hover:text-green-600 nav-trigger" href="#" data-page="reasons">Преимущества</a><span></span></li>
+                    <li class="nav-item"><a class="nav-link text-gray-700 hover:text-green-600 nav-trigger" href="#" data-page="before">Наши работы</a><span></span></li>
+                    <li class="nav-item"><a class="nav-link text-gray-700 hover:text-green-600 nav-trigger" href="#" data-page="faq">FAQ</a><span></span></li>
+                    <li class="nav-item"><a class="nav-link text-gray-700 hover:text-green-600 nav-trigger" href="#" data-page="contacts">Контакты</a><span></span></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Home Page -->
+        <div class="page-content active" data-page="home">
+            <section class="first py-24 md:py-40">
+                <div class="first__bg">
+                    <img src="https://cleaning-home.by/wp-content/uploads/2023/11/bg-1-2.jpg" alt="Фон главной страницы">
+                </div>
+                <div class="container mx-auto px-4 relative z-10">
+                    <div class="first__content max-w-2xl text-white">
+                        <h1 class="text-4xl md:text-5xl font-bold mb-4"><b>Профессиональный клининг с выездом на дом в Минске и области.</b></h1>
+                        <div class="first__bullets mt-8 flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-8">
+                            <div class="bullets-item flex items-center">
+                                <img src="https://cleaning-home.by/wp-content/uploads/2023/11/1.svg" alt="галочка" class="mr-3 h-6 w-6">
+                                <p>Опыт работы более 10 лет</p>
+                            </div>
+                            <div class="bullets-item flex items-center">
+                                <img src="https://cleaning-home.by/wp-content/uploads/2023/11/1.svg" alt="галочка" class="mr-3 h-6 w-6">
+                                <p>Профессиональное оборудование</p>
+                            </div>
+                            <div class="bullets-item flex items-center">
+                                <img src="https://cleaning-home.by/wp-content/uploads/2023/11/1.svg" alt="галочка" class="mr-3 h-6 w-6">
+                                <p>Сохранность имущества</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- Services Section -->
+            <section class="services py-16 bg-gray-50/95" id="usslugi">
+                <div class="container mx-auto px-4">
+                    <h2 class="text-3xl md:text-4xl font-bold text-center mb-12"><b>Наши услуги</b> и цены</h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                        <div class="services__item shadow-lg">
+                            <img src="https://cleaning-home.by/wp-content/uploads/2023/11/12-1.jpg" alt="Уборка после ремонта" class="w-full h-full object-cover">
+                            <div class="item-content">
+                                <div class="item-title text-xl font-bold"><a href="#">Уборка после ремонта</a></div>
+                                <div class="item-text mt-2">Генеральная уборка после ремонта в любых помещениях</div>
+                                <div class="item-title mt-2 font-semibold" style="padding-bottom: 1rem;">от 250 BYN</div>
+                            </div>
+                        </div>
+                        <div class="services__item shadow-lg">
+                            <img src="https://cleaning-home.by/wp-content/uploads/2023/11/4-1.jpg" alt="Генеральная уборка" class="w-full h-full object-cover">
+                            <div class="item-content">
+                                <div class="item-title text-xl font-bold"><a href="#">Генеральная уборка</a></div>
+                                <div class="item-text mt-2">Генеральная уборка квартир, домов, офисных помещений</div>
+                                <div class="item-title mt-2 font-semibold" style="padding-bottom: 1rem;">от 100 BYN</div>
+                            </div>
+                        </div>
+                        <div class="services__item shadow-lg">
+                            <img src="https://cleaning-home.by/wp-content/uploads/2023/11/22-1-1.jpg" alt="Уборка после смерти" class="w-full h-full object-cover">
+                            <div class="item-content">
+                                <div class="item-title text-xl font-bold"><a href="#">Уборка после смерти</a></div>
+                                <div class="item-text mt-2">Деликатная и тщательная уборка после умершего</div>
+                                <div class="item-title mt-2 font-semibold" style="padding-bottom: 1rem;">от 300 BYN</div>
+                            </div>
+                        </div>
+                        <div class="services__item shadow-lg">
+                            <img src="https://cleaning-home.by/wp-content/uploads/2024/07/scale_1202.png" alt="Устранение запахов" class="w-full h-full object-cover">
+                            <div class="item-content">
+                                <div class="item-title text-xl font-bold"><a href="#">Устранение запахов</a></div>
+                                <div class="item-text mt-2">Профессиональное устранение неприятных запахов</div>
+                                <div class="item-title mt-2 font-semibold" style="padding-bottom: 1rem;">от 130 BYN</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- NEW Why Us Section -->
+            <section class="py-16 bg-gray-100/95 relative overflow-hidden" id="why-us">
+                <div class="container mx-auto px-4">
+                    <h2 class="text-3xl md:text-4xl font-bold text-center mb-4">Идеальная чистота без компромиссов</h2>
+                    <p class="text-center text-gray-600 mb-12 max-w-3xl mx-auto">Мы не просто убираем, мы создаем пространство, в котором приятно жить и работать. Узнайте, почему нам доверяют сотни клиентов.</p>
+                    <div class="grid md:grid-cols-3 gap-8">
+                        <!-- Feature 1 -->
+                        <div class="feature-card bg-white/80 backdrop-blur-sm p-8 rounded-lg shadow-lg text-center transform hover:scale-105 transition-transform duration-300 border border-gray-200">
+                            <div class="text-5xl mb-4">✨</div>
+                            <h3 class="text-xl font-bold mb-2">Гарантия блеска</h3>
+                            <p class="text-gray-600">Мы гарантируем, что вы останетесь довольны результатом. Если нет — мы вернемся и все исправим бесплатно.</p>
+                        </div>
+                        <!-- Feature 2 -->
+                        <div class="feature-card bg-white/80 backdrop-blur-sm p-8 rounded-lg shadow-lg text-center transform hover:scale-105 transition-transform duration-300 border border-gray-200">
+                            <div class="text-5xl mb-4">🌿</div>
+                            <h3 class="text-xl font-bold mb-2">Эко-подход</h3>
+                            <p class="text-gray-600">Используем только сертифицированные, гипоаллергенные и безопасные средства для детей и животных.</p>
+                        </div>
+                        <!-- Feature 3 -->
+                        <div class="feature-card bg-white/80 backdrop-blur-sm p-8 rounded-lg shadow-lg text-center transform hover:scale-105 transition-transform duration-300 border border-gray-200">
+                             <div class="text-5xl mb-4">💰</div>
+                            <h3 class="text-xl font-bold mb-2">Честная цена</h3>
+                            <p class="text-gray-600">Стоимость оговаривается заранее и не меняется в процессе. Никаких скрытых платежей и доплат.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Services Page -->
+        <div class="page-content" data-page="services">
+            <section class="services py-16 bg-white/95" id="usslugi-page">
+                <div class="container mx-auto px-4">
+                    <h2 class="text-3xl md:text-4xl font-bold text-center mb-12"><b>Наши услуги</b> и цены</h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                         <div class="services__item shadow-lg">
+                            <img src="https://cleaning-home.by/wp-content/uploads/2023/11/12-1.jpg" alt="Уборка после ремонта" class="w-full h-full object-cover">
+                            <div class="item-content">
+                                <div class="item-title text-xl font-bold"><a href="#">Уборка после ремонта</a></div>
+                                <div class="item-text mt-2">Генеральная уборка после ремонта в любых помещениях</div>
+                                <div class="item-title mt-2 font-semibold" style="padding-bottom: 1rem;">от 250 BYN</div>
+                            </div>
+                        </div>
+                        <div class="services__item shadow-lg">
+                            <img src="https://cleaning-home.by/wp-content/uploads/2023/11/4-1.jpg" alt="Генеральная уборка" class="w-full h-full object-cover">
+                            <div class="item-content">
+                                <div class="item-title text-xl font-bold"><a href="#">Генеральная уборка</a></div>
+                                <div class="item-text mt-2">Генеральная уборка квартир, домов, офисных помещений</div>
+                                <div class="item-title mt-2 font-semibold" style="padding-bottom: 1rem;">от 100 BYN</div>
+                            </div>
+                        </div>
+                        <div class="services__item shadow-lg">
+                            <img src="https://cleaning-home.by/wp-content/uploads/2023/11/22-1-1.jpg" alt="Уборка после смерти" class="w-full h-full object-cover">
+                            <div class="item-content">
+                                <div class="item-title text-xl font-bold"><a href="#">Уборка после смерти</a></div>
+                                <div class="item-text mt-2">Деликатная и тщательная уборка после умершего</div>
+                                <div class="item-title mt-2 font-semibold" style="padding-bottom: 1rem;">от 300 BYN</div>
+                            </div>
+                        </div>
+                        <div class="services__item shadow-lg">
+                            <img src="https://cleaning-home.by/wp-content/uploads/2024/07/scale_1202.png" alt="Устранение запахов" class="w-full h-full object-cover">
+                            <div class="item-content">
+                                <div class="item-title text-xl font-bold"><a href="#">Устранение запахов</a></div>
+                                <div class="item-text mt-2">Профессиональное устранение неприятных запахов</div>
+                                <div class="item-title mt-2 font-semibold" style="padding-bottom: 1rem;">от 130 BYN</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Reasons Page -->
+        <div class="page-content" data-page="reasons">
+            <section class="reply py-16 bg-gray-50/95" id="reasons-page">
+                <div class="container mx-auto px-4">
+                    <h2 class="text-3xl md:text-4xl font-bold text-center mb-12"><b>Наши преимущества</b></h2>
+                    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <div class="reply__block text-center p-6 bg-white rounded-lg shadow-md"><img src="https://cleaning-home.by/wp-content/uploads/2023/11/12-2.jpg" alt="иконка" class="mx-auto mb-4 rounded-lg h-20 w-20 object-cover"><h3 class="text-xl font-semibold mb-2">Выводим любые пятна</h3><p class="text-gray-600">Специальные средства для разных видов пятен.</p></div>
+                        <div class="reply__block text-center p-6 bg-white rounded-lg shadow-md"><img src="https://cleaning-home.by/wp-content/uploads/2023/11/134.jpg" alt="иконка" class="mx-auto mb-4 rounded-lg h-20 w-20 object-cover"><h3 class="text-xl font-semibold mb-2">Избавим от запаха</h3><p class="text-gray-600">Глубокая обработка позволяет устранить неприятные запахи.</p></div>
+                        <div class="reply__block text-center p-6 bg-white rounded-lg shadow-md"><img src="https://cleaning-home.by/wp-content/uploads/2023/11/34.jpg" alt="иконка" class="mx-auto mb-4 rounded-lg h-20 w-20 object-cover"><h3 class="text-xl font-semibold mb-2">Современное оборудование</h3><p class="text-gray-600">Используем передовые технологии для быстрой уборки.</p></div>
+                        <div class="reply__block text-center p-6 bg-white rounded-lg shadow-md"><img src="https://cleaning-home.by/wp-content/uploads/2023/11/456.jpg" alt="иконка" class="mx-auto mb-4 rounded-lg h-20 w-20 object-cover"><h3 class="text-xl font-semibold mb-2">Эко-средства</h3><p class="text-gray-600">Применяем безопасные средства, не вредящие здоровью.</p></div>
+                        <div class="reply__block text-center p-6 bg-white rounded-lg shadow-md"><img src="https://cleaning-home.by/wp-content/uploads/2023/11/77.jpg" alt="иконка" class="mx-auto mb-4 rounded-lg h-20 w-20 object-cover"><h3 class="text-xl font-semibold mb-2">Опытные специалисты</h3><p class="text-gray-600">Квалифицированные сотрудники, готовые к любым задачам.</p></div>
+                        <div class="reply__block text-center p-6 bg-white rounded-lg shadow-md"><img src="https://cleaning-home.by/wp-content/uploads/2023/11/774.jpg" alt="иконка" class="mx-auto mb-4 rounded-lg h-20 w-20 object-cover"><h3 class="text-xl font-semibold mb-2">Гарантия качества</h3><p class="text-gray-600">Мы уверены в качестве своей работы и предоставляем гарантию.</p></div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Before/After Page -->
+        <div class="page-content" data-page="before">
+            <section class="before-after py-16 bg-white/95" id="before-page">
+                <div class="container mx-auto px-4">
+                    <h2 class="text-3xl md:text-4xl font-bold text-center mb-12"><b>До и После.</b> Результат нашей работы.</h2>
+                    <div class="swiper-container before-after-slider">
+                        <div class="swiper-wrapper">
+                            <div class="swiper-slide flex items-center justify-center"><div class="before-after__slide"><img src="https://cleaning-home.by/wp-content/uploads/2023/11/4-1-1.jpg" alt="До" class="before-image"><img src="https://cleaning-home.by/wp-content/uploads/2023/11/4-2.jpg" alt="После" class="after-image"><div class="before-after__slider-handle"></div></div></div>
+                            <div class="swiper-slide flex items-center justify-center"><div class="before-after__slide"><img src="https://cleaning-home.by/wp-content/uploads/2023/11/1-1.jpg" alt="До" class="before-image"><img src="https://cleaning-home.by/wp-content/uploads/2023/11/1-2.jpg" alt="После" class="after-image"><div class="before-after__slider-handle"></div></div></div>
+                            <div class="swiper-slide flex items-center justify-center"><div class="before-after__slide"><img src="https://cleaning-home.by/wp-content/uploads/2023/11/3-1.jpg" alt="До" class="before-image"><img src="https://cleaning-home.by/wp-content/uploads/2023/11/3-2.jpg" alt="После" class="after-image"><div class="before-after__slider-handle"></div></div></div>
+                        </div>
+                        <div class="swiper-pagination"></div>
+                        <div class="swiper-button-next text-green-600"></div>
+                        <div class="swiper-button-prev text-green-600"></div>
+                    </div>
+                </div>
+            </section>
+        </div>
+        
+        <!-- FAQ Page -->
+        <div class="page-content" data-page="faq">
+            <section class="questions py-16 bg-white/95" id="faq-page">
+                <div class="container mx-auto px-4 max-w-4xl">
+                    <h2 class="text-3xl md:text-4xl font-bold text-center mb-12">Часто задаваемые <b>вопросы</b></h2>
+                    <div class="questions__container space-y-4">
+                        <div class="questions__item bg-gray-50 rounded-lg shadow"><div class="item-title flex justify-between items-center p-5 cursor-pointer"><h4 class="font-semibold">Что такое клининг и чем он отличается от обычной уборки?</h4><div class="item-btn w-8 h-8 rounded-full bg-green-500 text-white flex items-center justify-center flex-shrink-0"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"></path></svg></div></div><div class="item-content px-5 text-gray-600"><p>Клининг — это профессиональная уборка, которая включает в себя не только регулярную уборку, но и специализированные услуги, такие как глубокая чистка, дезинфекция и уборка после ремонта. Клининговые компании используют специализированное оборудование и безопасные средства для более эффективного результата.</p></div></div>
+                        <div class="questions__item bg-gray-50 rounded-lg shadow"><div class="item-title flex justify-between items-center p-5 cursor-pointer"><h4 class="font-semibold">Как определяется стоимость клининговых услуг?</h4><div class="item-btn w-8 h-8 rounded-full bg-green-500 text-white flex items-center justify-center flex-shrink-0"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"></path></svg></div></div><div class="item-content px-5 text-gray-600"><p>Стоимость определяется на основе объема работы, типа помещения, степени загрязнения и дополнительных услуг. Мы предоставляем точную оценку после прохождения квиза или консультации по телефону.</p></div></div>
+                        <div class="questions__item bg-gray-50 rounded-lg shadow"><div class="item-title flex justify-between items-center p-5 cursor-pointer"><h4 class="font-semibold">Используете ли вы безопасные для здоровья моющие средства?</h4><div class="item-btn w-8 h-8 rounded-full bg-green-500 text-white flex items-center justify-center flex-shrink-0"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"></path></svg></div></div><div class="item-content px-5 text-gray-600"><p>Да, мы применяем только сертифицированные, экологически чистые и безопасные моющие средства, которые не вредят здоровью людей, домашних животных и окружающей среде.</p></div></div>
+                    </div>
+                </div>
+            </section>
+        </div>
+        
+        <!-- Contacts Page Content (Footer is now global) -->
+        <div class="page-content" data-page="contacts">
+             <section class="py-16 bg-white/95" id="contacts-content">
+                <div class="container mx-auto px-4 text-center">
+                    <h2 class="text-3xl md:text-4xl font-bold mb-4">Свяжитесь с нами</h2>
+                    <p class="text-gray-600 max-w-2xl mx-auto mb-8">Мы всегда готовы ответить на ваши вопросы и рассчитать стоимость уборки. Позвоните нам, напишите в мессенджеры или закажите обратный звонок.</p>
+                    <div class="inline-block bg-white p-8 rounded-lg shadow-lg border">
+                        <p class="text-gray-500">Наш адрес:</p>
+                        <p class="text-xl font-semibold">г. Минск</p>
+                        <p class="text-gray-500 mt-4">Телефон для связи:</p>
+                        <a href="tel:+375291861381" class="text-2xl font-bold text-gray-800 hover:text-green-600 mt-2 block">+375(29)1861381</a>
+                        <button id="open-callback-popup-2" class="mt-4 md-main-color-btn py-2 px-6 rounded-lg font-semibold">Заказать звонок</button>
+                    </div>
+                </div>
+             </section>
+        </div>
+
+    </main>
+    
+    <!-- GLOBAL FOOTER: Moved out of page content to be always visible -->
+    <footer class="bg-gray-800 text-white pt-12" id="contacts-page">
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-3 gap-8 text-center md:text-left">
+                <div><h4 class="text-xl font-bold mb-4">PRIME CLEAN</h4><p class="text-gray-400">Профессиональный клининг в Минске и Минской области. Ваша чистота - наша забота.</p></div>
+                <div><h4 class="text-xl font-bold mb-4">Навигация</h4><ul class="space-y-2"><li><a href="#" data-page="services" class="text-gray-400 hover:text-white nav-trigger">Услуги</a></li><li><a href="#" data-page="reasons" class="text-gray-400 hover:text-white nav-trigger">Преимущества</a></li><li><a href="#" data-page="faq" class="text-gray-400 hover:text-white nav-trigger">Вопросы и ответы</a></li></ul></div>
+                <div><h4 class="text-xl font-bold mb-4">Контакты</h4><p class="text-gray-400">г. Минск</p><a href="tel:+375291861381" class="block text-lg text-white hover:text-green-400 mt-2">+375(29)1861381</a><div class="social-links flex space-x-4 mt-4 justify-center md:justify-start"><a target="_blank" href="#"><img src="https://cleaning-home.by/wp-content/uploads/2022/11/viber.png" alt="Viber" class="rounded-full h-8 w-8"></a><a target="_blank" href="#"><img src="https://cleaning-home.by/wp-content/uploads/2022/11/telegram.png" alt="Telegram" class="rounded-full h-8 w-8"></a><a target="_blank" href="#"><img src="https://cleaning-home.by/wp-content/uploads/2022/11/whats-app.png" alt="WhatsApp" class="rounded-full h-8 w-8"></a></div></div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 py-4 text-center text-gray-500 text-sm"><p>&copy; 2024 PRIME CLEAN. Все права защищены.</p></div>
+        </div>
+    </footer>
+
+    <!-- Call Back Popup -->
+    <div id="call-back-popup" class="popup">
+        <div class="popup-content bg-white p-8 rounded-lg shadow-xl w-11/12 max-w-md">
+            <button class="popup-close">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+            </button>
+            <h3 class="text-2xl font-bold text-center mb-4">Заказать обратный звонок</h3>
+            <p class="text-center text-gray-600 mb-6">Оставьте свой номер, и мы перезвоним вам в ближайшее время!</p>
+            <form class="space-y-4">
+                <input type="text" placeholder="Ваше имя" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+                <input type="tel" placeholder="Ваш телефон" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+                <button type="submit" class="w-full md-main-color-btn py-3 rounded-lg font-semibold">Жду звонка</button>
+            </form>
+        </div>
+    </div>
+
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // --- Page Navigation ---
+        const pageTriggers = document.querySelectorAll('.nav-trigger');
+        const pages = document.querySelectorAll('.page-content');
+        const navItems = document.querySelectorAll('.nav-item');
+        const footer = document.querySelector('footer');
+
+        function showPage(pageId) {
+            pages.forEach(page => {
+                page.classList.toggle('active', page.dataset.page === pageId);
+            });
+            navItems.forEach(item => {
+                const link = item.querySelector('.nav-trigger');
+                if (link) {
+                    item.classList.toggle('nav-item--active', link.dataset.page === pageId);
+                }
+            });
+            
+            // The footer is now global, so it's always visible. No need to toggle.
+            
+            window.scrollTo(0, 0); // Scroll to top on page change
+        }
+
+        pageTriggers.forEach(trigger => {
+            trigger.addEventListener('click', (e) => {
+                e.preventDefault();
+                const pageId = trigger.dataset.page;
+                showPage(pageId);
+                // Close mobile menu on navigation
+                const mobileMenu = document.getElementById('mobile-menu');
+                if(mobileMenu.classList.contains('active')) {
+                    mobileMenu.classList.remove('active');
+                }
+            });
+        });
+        // Set initial page
+        showPage('home');
+
+
+        // --- Mobile Menu ---
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('active');
+        });
+
+        // --- Popups ---
+        const callbackPopup = document.getElementById('call-back-popup');
+        
+        function openPopup(popupEl) {
+            if(popupEl) popupEl.classList.add('active');
+        }
+
+        function closePopups() {
+            document.querySelectorAll('.popup.active').forEach(p => p.classList.remove('active'));
+        }
+        
+        // Add listeners to all buttons that should open the popup
+        document.querySelectorAll('#open-callback-popup, #open-callback-popup-2').forEach(btn => {
+            if(btn) {
+                btn.addEventListener('click', () => openPopup(callbackPopup));
+            }
+        });
+
+        document.querySelectorAll('.popup-close').forEach(btn => {
+            btn.addEventListener('click', closePopups);
+        });
+        
+        document.querySelectorAll('.popup').forEach(popup => {
+            popup.addEventListener('click', (e) => {
+                // Close if clicked on the background overlay
+                if (e.target === popup) {
+                    closePopups();
+                }
+            });
+        });
+
+        // --- FAQ Accordion ---
+        const faqItems = document.querySelectorAll('.questions__item');
+        faqItems.forEach(item => {
+            const title = item.querySelector('.item-title');
+            title.addEventListener('click', () => {
+                const currentlyActive = document.querySelector('.questions__item.active');
+                // Close other items if one is opened
+                if (currentlyActive && currentlyActive !== item) {
+                    currentlyActive.classList.remove('active');
+                }
+                item.classList.toggle('active');
+            });
+        });
+
+        // --- Before/After Slider ---
+        // Ensure Swiper is initialized only when the page is visible
+        let beforeAfterSlider;
+        function initSwiper() {
+            if (!beforeAfterSlider && document.querySelector('.before-after-slider').offsetParent !== null) {
+                 beforeAfterSlider = new Swiper('.before-after-slider', {
+                    loop: true,
+                    navigation: {
+                        nextEl: '.swiper-button-next',
+                        prevEl: '.swiper-button-prev',
+                    },
+                    pagination: {
+                        el: '.swiper-pagination',
+                        clickable: true,
+                    },
+                });
+            }
+        }
+        
+        // Check on page load/navigate
+        const beforePageObserver = new MutationObserver((mutations) => {
+            for (let mutation of mutations) {
+                if (mutation.attributeName === 'class' && mutation.target.classList.contains('active')) {
+                    initSwiper();
+                }
+            }
+        });
+        const beforePage = document.querySelector('[data-page="before"]');
+        if (beforePage) {
+            beforePageObserver.observe(beforePage, { attributes: true });
+        }
+        initSwiper(); // Initial check
+
+
+        document.querySelectorAll('.before-after__slide').forEach(slide => {
+            const afterImage = slide.querySelector('.after-image');
+            const handle = slide.querySelector('.before-after__slider-handle');
+
+            const moveHandler = (x) => {
+                const rect = slide.getBoundingClientRect();
+                let percentage = ((x - rect.left) / rect.width) * 100;
+                percentage = Math.max(0, Math.min(100, percentage));
+                afterImage.style.clipPath = `polygon(${percentage}% 0, 100% 0, 100% 100%, ${percentage}% 100%)`;
+                if(handle) handle.style.left = `${percentage}%`;
+            };
+
+            let isDragging = false;
+
+            slide.addEventListener('mousedown', (e) => { isDragging = true; e.preventDefault(); });
+            slide.addEventListener('touchstart', (e) => { isDragging = true; e.preventDefault(); });
+            
+            window.addEventListener('mouseup', () => { isDragging = false; });
+            window.addEventListener('touchend', () => { isDragging = false; });
+
+            slide.addEventListener('mousemove', (e) => {
+                if (isDragging) moveHandler(e.clientX);
+            });
+            slide.addEventListener('touchmove', (e) => {
+                if (isDragging) moveHandler(e.touches[0].clientX);
+            });
+        });
+
+    });
+    </script>
+</body>
+</html>
