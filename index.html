@@ -637,12 +637,39 @@
 
     <script>
     document.addEventListener('DOMContentLoaded', function () {
-        // --- Page Navigation ---
+        // --- Global Variables ---
         const pageTriggers = document.querySelectorAll('.nav-trigger');
         const pages = document.querySelectorAll('.page-content');
         const navItems = document.querySelectorAll('.nav-item');
-        const footer = document.querySelector('footer');
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const callbackPopup = document.getElementById('call-back-popup');
+        let beforeAfterSlider = null; // To hold the swiper instance
 
+        // --- Swiper Initialization ---
+        function initSwiper() {
+            const sliderContainer = document.querySelector('.before-after-slider');
+            // Only initialize if it's visible and not already initialized
+            if (sliderContainer && sliderContainer.offsetParent !== null && !sliderContainer.swiper) {
+                beforeAfterSlider = new Swiper('.before-after-slider', {
+                    loop: true,
+                    navigation: {
+                        nextEl: '.swiper-button-next',
+                        prevEl: '.swiper-button-prev',
+                    },
+                    pagination: {
+                        el: '.swiper-pagination',
+                        clickable: true,
+                    },
+                    // These options help Swiper to re-initialize correctly
+                    // when it becomes visible after being hidden.
+                    observer: true,
+                    observeParents: true,
+                });
+            }
+        }
+
+        // --- Page Navigation ---
         function showPage(pageId) {
             pages.forEach(page => {
                 page.classList.toggle('active', page.dataset.page === pageId);
@@ -653,6 +680,12 @@
                     item.classList.toggle('nav-item--active', link.dataset.page === pageId);
                 }
             });
+
+            // --- FIXED: Initialize Swiper on its page ---
+            if (pageId === 'before') {
+                // A small timeout ensures the element is fully rendered before initialization
+                setTimeout(initSwiper, 50);
+            }
             
             window.scrollTo(0, 0); // Scroll to top on page change
         }
@@ -662,27 +695,21 @@
                 e.preventDefault();
                 const pageId = trigger.dataset.page;
                 showPage(pageId);
-                // Close mobile menu on navigation
-                const mobileMenu = document.getElementById('mobile-menu');
                 if(mobileMenu.classList.contains('active')) {
                     mobileMenu.classList.remove('active');
                 }
             });
         });
+
         // Set initial page
         showPage('home');
 
-
         // --- Mobile Menu ---
-        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-        const mobileMenu = document.getElementById('mobile-menu');
         mobileMenuBtn.addEventListener('click', () => {
             mobileMenu.classList.toggle('active');
         });
 
         // --- Popups ---
-        const callbackPopup = document.getElementById('call-back-popup');
-        
         function openPopup(popupEl) {
             if(popupEl) popupEl.classList.add('active');
         }
@@ -692,9 +719,7 @@
         }
         
         document.querySelectorAll('#open-callback-popup, #open-callback-popup-2').forEach(btn => {
-            if(btn) {
-                btn.addEventListener('click', () => openPopup(callbackPopup));
-            }
+            if(btn) btn.addEventListener('click', () => openPopup(callbackPopup));
         });
 
         document.querySelectorAll('.popup-close').forEach(btn => {
@@ -703,9 +728,7 @@
         
         document.querySelectorAll('.popup').forEach(popup => {
             popup.addEventListener('click', (e) => {
-                if (e.target === popup) {
-                    closePopups();
-                }
+                if (e.target === popup) closePopups();
             });
         });
 
@@ -722,41 +745,7 @@
             });
         });
 
-        // --- Before/After Slider (FIXED) ---
-        let beforeAfterSlider;
-        function initSwiper() {
-            if (!beforeAfterSlider && document.querySelector('.before-after-slider').offsetParent !== null) {
-                 beforeAfterSlider = new Swiper('.before-after-slider', {
-                    loop: true,
-                    navigation: {
-                        nextEl: '.swiper-button-next',
-                        prevEl: '.swiper-button-prev',
-                    },
-                    pagination: {
-                        el: '.swiper-pagination',
-                        clickable: true,
-                    },
-                });
-            }
-        }
-        
-        const beforePageObserver = new MutationObserver((mutations) => {
-            for (let mutation of mutations) {
-                if (mutation.attributeName === 'class' && mutation.target.classList.contains('active')) {
-                    // Use a small timeout to ensure the element is fully visible and rendered
-                    setTimeout(initSwiper, 100);
-                }
-            }
-        });
-        const beforePage = document.querySelector('[data-page="before"]');
-        if (beforePage) {
-            beforePageObserver.observe(beforePage, { attributes: true });
-            // Initial check if the page is already active
-            if (beforePage.classList.contains('active')) {
-                initSwiper();
-            }
-        }
-
+        // --- Before/After Drag Handler ---
         document.querySelectorAll('.before-after__slide').forEach(slide => {
             const afterImage = slide.querySelector('.after-image');
             const handle = slide.querySelector('.before-after__slider-handle');
@@ -784,7 +773,6 @@
                 if (isDragging) moveHandler(e.touches[0].clientX);
             });
         });
-
     });
     </script>
 </body>
