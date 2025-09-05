@@ -647,10 +647,17 @@
             </button>
             <h3 class="text-2xl font-bold text-center mb-4">Заказать обратный звонок</h3>
             <p class="text-center text-gray-600 mb-6">Оставьте свой номер, и мы перезвоним вам в ближайшее время!</p>
-            <form class="space-y-4">
-                <input type="text" placeholder="Ваше имя" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
-                <input type="tel" placeholder="Ваш телефон" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+            <!-- MODIFIED FORM -->
+            <form id="callback-form" class="space-y-4">
+                <!-- IMPORTANT: Replace with your Access Key from web3forms.com -->
+                <input type="hidden" name="access_key" value="YOUR_ACCESS_KEY_HERE">
+                <input type="hidden" name="subject" value="Новая заявка с сайта Prime Clean">
+                <input type="hidden" name="from_name" value="Prime Clean Заявка">
+                
+                <input type="text" name="Имя" placeholder="Ваше имя" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" required>
+                <input type="tel" name="Телефон" placeholder="Ваш телефон" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" required>
                 <button type="submit" class="w-full md-main-color-btn py-3 rounded-lg font-semibold">Жду звонка</button>
+                <div id="form-result" class="text-center mt-4 h-5"></div>
             </form>
         </div>
     </div>
@@ -682,8 +689,6 @@
                         el: '.swiper-pagination',
                         clickable: true,
                     },
-                    // These options help Swiper to re-initialize correctly
-                    // when it becomes visible after being hidden.
                     observer: true,
                     observeParents: true,
                 });
@@ -702,9 +707,7 @@
                 }
             });
 
-            // --- FIXED: Initialize Swiper on its page ---
             if (pageId === 'before') {
-                // A small timeout ensures the element is fully rendered before initialization
                 setTimeout(initSwiper, 50);
             }
             
@@ -794,6 +797,65 @@
                 if (isDragging) moveHandler(e.touches[0].clientX);
             });
         });
+
+        // --- NEW: Form Submission Handler ---
+        const form = document.getElementById('callback-form');
+        const resultDiv = document.getElementById('form-result');
+        const submitButton = form.querySelector('button[type="submit"]');
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(form);
+            const object = Object.fromEntries(formData);
+            const json = JSON.stringify(object);
+
+            // IMPORTANT: Check if the access key is the placeholder
+            if (object.access_key === 'ebfe2e38-30e5-46da-9fab-b37dccc73d50') {
+                resultDiv.innerHTML = '<p class="text-red-500">Ошибка: Укажите ваш Access Key в HTML коде.</p>';
+                return;
+            }
+
+            resultDiv.innerHTML = '<p class="text-gray-600">Отправка...</p>';
+            submitButton.disabled = true;
+
+            fetch('https://api.web3forms.com/submit', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: json
+            })
+            .then(async (response) => {
+                let jsonResponse = await response.json();
+                if (response.status == 200) {
+                    resultDiv.innerHTML = `<p class="text-green-600">${jsonResponse.message || 'Форма успешно отправлена!'}</p>`;
+                    form.reset();
+                    setTimeout(() => {
+                        resultDiv.innerHTML = '';
+                        closePopups(); // Close popup on success
+                    }, 3000);
+                } else {
+                    console.log(response);
+                    resultDiv.innerHTML = `<p class="text-red-500">${jsonResponse.message || 'Что-то пошло не так.'}</p>`;
+                }
+            })
+            .catch(error => {
+                console.log(error);
+                resultDiv.innerHTML = '<p class="text-red-500">Произошла ошибка при отправке.</p>';
+            })
+            .finally(() => {
+                submitButton.disabled = false;
+                // Clear error/info messages after a few seconds
+                if (!resultDiv.innerHTML.includes('text-green-600')) {
+                    setTimeout(() => {
+                        resultDiv.innerHTML = '';
+                    }, 5000);
+                }
+            });
+        });
+
     });
     </script>
 </body>
