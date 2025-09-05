@@ -798,65 +798,77 @@
             });
         });
 
-        // --- NEW: Form Submission Handler ---
-        const form = document.getElementById('callback-form');
-        const resultDiv = document.getElementById('form-result');
-        const submitButton = form.querySelector('button[type="submit"]');
+      // Проверяем существование элементов
+const form = document.getElementById('callback-form');
+const resultDiv = document.getElementById('form-result');
 
-        form.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const formData = new FormData(form);
-            const object = Object.fromEntries(formData);
-            const json = JSON.stringify(object);
+if (!form || !resultDiv) {
+    console.error('Form or result div not found');
+    return;
+}
 
-            // IMPORTANT: Check if the access key is the placeholder
-            if (object.access_key === 'ebfe2e38-30e5-46da-9fab-b37dccc73d50') {
-                resultDiv.innerHTML = '<p class="text-red-500">Ошибка: Укажите ваш Access Key в HTML коде.</p>';
-                return;
-            }
+const submitButton = form.querySelector('button[type="submit"]');
+if (!submitButton) {
+    console.error('Submit button not found');
+    return;
+}
 
-            resultDiv.innerHTML = '<p class="text-gray-600">Отправка...</p>';
-            submitButton.disabled = true;
-
-            fetch('https://api.web3forms.com/submit', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                },
-                body: json
-            })
-            .then(async (response) => {
-                let jsonResponse = await response.json();
-                if (response.status == 200) {
-                    resultDiv.innerHTML = `<p class="text-green-600">${jsonResponse.message || 'Форма успешно отправлена!'}</p>`;
-                    form.reset();
-                    setTimeout(() => {
-                        resultDiv.innerHTML = '';
-                        closePopups(); // Close popup on success
-                    }, 3000);
-                } else {
-                    console.log(response);
-                    resultDiv.innerHTML = `<p class="text-red-500">${jsonResponse.message || 'Что-то пошло не так.'}</p>`;
+form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(form);
+    const object = Object.fromEntries(formData);
+    const json = JSON.stringify(object);
+    
+    // Проверяем наличие access_key
+    if (!object.access_key || object.access_key.trim() === '') {
+        resultDiv.innerHTML = '<p class="text-red-500">Ошибка: Не указан Access Key.</p>';
+        return;
+    }
+    
+    resultDiv.innerHTML = '<p class="text-gray-600">Отправка...</p>';
+    submitButton.disabled = true;
+    
+    fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+        body: json
+    })
+    .then(async (response) => {
+        const jsonResponse = await response.json();
+        if (response.ok) { // Используем response.ok вместо status == 200
+            resultDiv.innerHTML = `<p class="text-green-600">${jsonResponse.message || 'Форма успешно отправлена!'}</p>`;
+            form.reset();
+            setTimeout(() => {
+                resultDiv.innerHTML = '';
+                if (typeof closePopups === 'function') {
+                    closePopups();
                 }
-            })
-            .catch(error => {
-                console.log(error);
-                resultDiv.innerHTML = '<p class="text-red-500">Произошла ошибка при отправке.</p>';
-            })
-            .finally(() => {
-                submitButton.disabled = false;
-                // Clear error/info messages after a few seconds
-                if (!resultDiv.innerHTML.includes('text-green-600')) {
-                    setTimeout(() => {
-                        resultDiv.innerHTML = '';
-                    }, 5000);
-                }
-            });
-        });
-
+            }, 3000);
+        } else {
+            console.error('Response error:', response.status, jsonResponse);
+            resultDiv.innerHTML = `<p class="text-red-500">${jsonResponse.message || 'Что-то пошло не так.'}</p>`;
+            // Очищаем сообщение об ошибке через 5 секунд
+            setTimeout(() => {
+                resultDiv.innerHTML = '';
+            }, 5000);
+        }
+    })
+    .catch(error => {
+        console.error('Fetch error:', error);
+        resultDiv.innerHTML = '<p class="text-red-500">Произошла ошибка при отправке.</p>';
+        // Очищаем сообщение об ошибке через 5 секунд
+        setTimeout(() => {
+            resultDiv.innerHTML = '';
+        }, 5000);
+    })
+    .finally(() => {
+        submitButton.disabled = false;
     });
+});
     </script>
 </body>
 </html>
